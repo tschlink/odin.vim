@@ -131,9 +131,9 @@ highlight link odinForeign Keyword
 highlight link odinNoinit Keyword
 highlight link odinDo Keyword
 
-highlight link odinDefer Operator
-highlight link odinDynamic Operator
-highlight link odinMap Operator
+highlight link odinDefer Keyword
+highlight link odinDynamic Keyword
+highlight link odinMap Keyword
 highlight link odinRange Operator
 highlight link odinHalfRange Operator
 highlight link odinAssign Operator
