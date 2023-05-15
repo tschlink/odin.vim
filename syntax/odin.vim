@@ -2,6 +2,9 @@ if exists("b:current_syntax")
   finish
 endif
 
+setlocal commentstring=//\ %s
+setlocal suffixesadd=.odin
+
 syntax keyword odinUsing using
 syntax keyword odinTransmute transmute
 syntax keyword odinCast cast
@@ -97,6 +100,9 @@ syntax match odinTemplate "$\<\w\+\>"
 syntax match odinCommentNote "@\<\w\+\>" contained display
 syntax region odinLineComment start=/\/\// end=/$/  contains=odinCommentNote, odinTodo, odinNote, odinXXX, odinFixMe, odinNoCheckin, odinHack
 syntax region odinBlockComment start=/\v\/\*/ end=/\v\*\// contains=odinBlockComment, odinCommentNote, odinTodo, odinNote, odinXXX, odinFixMe, odinNoCheckin, odinHack
+
+" Maybe scan back to find the beginning of block comments?
+syntax sync minlines=200
 
 highlight link odinUsing Keyword
 highlight link odinTransmute Keyword
