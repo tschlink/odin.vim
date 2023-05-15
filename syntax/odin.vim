@@ -68,7 +68,8 @@ syntax keyword odinDefer defer
 
 syntax region odinRawString start=+`+ end=+`+
 syntax region odinChar start=+'+ skip=+\\\\\|\\'+ end=+'+
-syntax region odinString start=+"+ skip=+\\\\\|\\'+ end=+"+
+syntax region odinString start=+"+ skip=+\\\\\|\\'+ end=+"+ contains=odinEscape
+syntax match odinEscape display contained /\\\([nrt\\'"]\|x\x\{2}\)/
 
 syntax match odinFunctionDecl "\v<\w*>(\s*::\s*proc)@="
 syntax match odinFunctionCall "\v\w+\s*(\()@="
@@ -136,8 +137,8 @@ highlight link odinExport Keyword
 highlight link odinForeign Keyword
 highlight link odinNoinit Keyword
 highlight link odinDo Keyword
-
 highlight link odinDefer Keyword
+
 highlight link odinDynamic Keyword
 highlight link odinMap Keyword
 highlight link odinRange Operator
