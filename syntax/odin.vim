@@ -54,7 +54,6 @@ syntax keyword odinDynamic dynamic
 syntax keyword odinMap map
 syntax keyword odinProc proc
 syntax keyword odinIn in
-syntax keyword odinNotIn notin
 syntax keyword odinNotIn not_in
 syntax keyword odinImport import
 syntax keyword odinExport export
@@ -138,9 +137,9 @@ highlight link odinForeign Keyword
 highlight link odinNoinit Keyword
 highlight link odinDo Keyword
 highlight link odinDefer Keyword
-
 highlight link odinDynamic Keyword
 highlight link odinMap Keyword
+
 highlight link odinRange Operator
 highlight link odinHalfRange Operator
 highlight link odinAssign Operator
