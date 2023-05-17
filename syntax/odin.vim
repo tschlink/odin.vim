@@ -70,12 +70,13 @@ syntax region odinChar start=+'+ skip=+\\\\\|\\'+ end=+'+
 syntax region odinString start=+"+ skip=+\\\\\|\\'+ end=+"+ contains=odinEscape
 syntax match odinEscape display contained /\\\([nrt\\'"]\|x\x\{2}\)/
 
+syntax match odinDeclaration "\v<\w>\s*::@="
 syntax match odinFunctionDecl "\v<\w*>(\s*::\s*proc)@="
 syntax match odinFunctionCall "\v\w+\s*(\()@="
 
 syntax match odinTagNote "@\<\w\+\>" display
 
-syntax match odinDeclaration "\:\:\?" display
+syntax match odinDeclarationOp "\:\:\?" display
 syntax match odinDeclAssign ":=" display
 syntax match odinAssign "=" display
 
@@ -90,7 +91,6 @@ syntax match odinReturnOp "->" display
 syntax match odinDirective "#\<\w\+\>" display
 
 syntax match odinTemplate "$\<\w\+\>"
-syntax match odinConstant "\v<[A-Z0-9,_]+>" display
 
 syntax match odinTodo "TODO"
 syntax match odinNote "NOTE"
@@ -170,12 +170,13 @@ highlight link odinRawString String
 highlight link odinChar      String
 
 " :FunctionHighlighting
+highlight link odinDeclaration Function
 highlight link odinFunctionDecl Function
 highlight link odinFunctionCall Function
 
 highlight link odinTagNote Identifier
 
-highlight link odinDeclaration  Operator
+highlight link odinDeclarationOp  Operator
 highlight link odinDeclAssign   Operator
 highlight link odinAssign       Operator
 
@@ -190,7 +191,6 @@ highlight link odinReturnOp     Operator
 highlight link odinDirective Macro
 
 highlight link odinTemplate Constant
-highlight link odinConstant Constant
 
 highlight link odinTodo        Todo
 highlight link odinNote        Todo
@@ -202,6 +202,5 @@ highlight link odinCommentNote Todo
 
 highlight link odinLineComment  Comment
 highlight link odinBlockComment Comment
-
 
 let b:current_syntax = "odin"
