@@ -1,6 +1,6 @@
-if exists("b:current_syntax")
-  finish
-endif
+" if exists("b:current_syntax")
+"   finish
+" endif
 
 setlocal commentstring=//\ %s
 setlocal suffixesadd=.odin
@@ -56,8 +56,6 @@ syntax keyword odinBool true false
 syntax keyword odinNull nil
 syntax match odinNoinit "---"
 
-syntax keyword odinAttrib private require link_name link_prefix export linkage default_calling_convention link_section extra_linker_flags deferred_in deferred_out deferred_in_out deferred_none
-
 syntax match odinInteger "\-\?\<\d\+\>" display
 syntax match odinHex "\<0[xX][0-9A-Fa-f]\+\>" display
 syntax match odinOct "\<0[oO][0-7]\+\>" display
@@ -70,13 +68,17 @@ syntax region odinChar start=+'+ skip=+\\\\\|\\'+ end=+'+
 syntax region odinString start=+"+ skip=+\\\\\|\\'+ end=+"+ contains=odinEscape
 syntax match odinEscape display contained /\\\([nrt\\'"]\|x\x\{2}\)/
 
-syntax match odinDeclaration "\v<\w>\s*::@="
-syntax match odinFunctionDecl "\v<\w*>(\s*::\s*proc)@="
-syntax match odinFunctionCall "\v\w+\s*(\()@="
+" @= means "match the previous atom (part between parentheses) but do not
+" consider it part of the matched expression, i.e. the atom must be present
+" but is not part of the syntax group
 
-syntax match odinTagNote "@\<\w\+\>" display
+" Any declaration, constant or procedure
+syntax match odinConstDeclaration "\v<\w+>(\s*:\s*\w*\s*:)@="
+syntax match odinVariableDeclaration "\v<\w+>(\s*:\s*\w*\s*\=)@="
+"syntax match odinFunctionDecl "\v<\w*>(\s*::\s*proc)@="
+syntax match odinFunctionCall "\v\w*\.\?\w+\s*(\()@="
 
-syntax match odinDeclarationOp "\:\:\?" display
+syntax match odinDeclarationOp "::?" display
 syntax match odinDeclAssign ":=" display
 syntax match odinAssign "=" display
 
@@ -87,6 +89,9 @@ syntax match odinDeref "\^" display
 
 syntax match odinTernaryQMark "?" display
 syntax match odinReturnOp "->" display
+
+syntax match odinSingleAttribute "^\s*@\<\w\+\>" display
+syntax keyword odinAttribute private require link_name link_prefix export linkage default_calling_convention link_section extra_linker_flags deferred_in deferred_out deferred_in_out deferred_none
 
 syntax match odinDirective "#\<\w\+\>" display
 
@@ -156,8 +161,6 @@ highlight link odinBool Boolean
 highlight link odinNull Type
 highlight link odinNoinit Keyword
 
-highlight link odinAttrib Keyword
-
 highlight link odinInteger Number
 highlight link odinHex     Number
 highlight link odinOct     Number
@@ -169,16 +172,14 @@ highlight link odinString    String
 highlight link odinRawString String
 highlight link odinChar      String
 
-" :FunctionHighlighting
-highlight link odinDeclaration Function
-highlight link odinFunctionDecl Function
+highlight link odinConstDeclaration    Identifier
+highlight link odinVariableDeclaration Identifier
+"highlight link odinFunctionDecl Function
 highlight link odinFunctionCall Function
 
-highlight link odinTagNote Identifier
-
-highlight link odinDeclarationOp  Operator
-highlight link odinDeclAssign   Operator
-highlight link odinAssign       Operator
+highlight link odinDeclarationOp Operator
+highlight link odinDeclAssign    Operator
+highlight link odinAssign        Operator
 
 highlight link odinRange     Operator
 highlight link odinHalfRange Operator
@@ -187,6 +188,9 @@ highlight link odinDeref     Operator
 
 highlight link odinTernaryQMark Operator
 highlight link odinReturnOp     Operator
+
+highlight link odinSingleAttribute Keyword
+highlight link odinAttribute Keyword
 
 highlight link odinDirective Macro
 
