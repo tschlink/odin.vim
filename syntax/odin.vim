@@ -73,25 +73,10 @@ syntax match odinFloat "\-\?\<[0-9][0-9_]*\%(\.[0-9][0-9_]*\)\%([eE][+-]\=[0-9_]
 
 syntax match odinOperator "\V!\|+\|-\|*\|/\|%\|%%"
 syntax match odinOperator "\V+=\|-=\|*=\|/=\|%=\|%%="
-syntax match odinOperator "\V>\|>=\|<\|<=\|==\|!=\|&&\|&&=\|||\|||="
+syntax match odinOperator "\V>\|>=\|<\|<=\|!=\|&&\|&&=\|||\|||="
 syntax match odinOperator "\V~\|~=\||\||=\|&\|&=\|&~\|&~=\|<<\|<<=\|>>\|>>="
 
-syntax region odinRawString start=+`+ end=+`+
-syntax region odinChar start=+'+ skip=+\\\\\|\\'+ end=+'+
-syntax region odinString start=+"+ skip=+\\\\\|\\'+ end=+"+ contains=odinEscape
-syntax match odinEscape display contained /\\\([abefnrtv\\'"]\|\o\{2}\|x\x\{2}\|u\x\{4}\|u\x\{8}\)/
-
-" @= means "match the previous atom (part between parentheses) but do not
-" consider it part of the matched expression, i.e. the atom must be present
-" but is not part of the syntax group
-
-" Any declaration, constant or procedure
-syntax match odinConstDeclaration "\v<\w+>(\s*:\s*\w*\s*:)@="
-syntax match odinVariableDeclaration "\v<\w+>(\s*:\s*\w*\s*\=)@="
-"syntax match odinFunctionDecl "\v<\w*>(\s*::\s*proc)@="
-syntax match odinFunctionCall "\v(<\w+>\.)?<\w+>\s*(\()@="
-
-syntax match odinDeclarationOp "::\?" display
+syntax match odinDeclarationOp "::\=" display
 syntax match odinDeclAssign ":=" display
 syntax match odinAssign "=" display
 
@@ -103,12 +88,28 @@ syntax match odinDeref "\^" display
 syntax match odinTernaryQMark "?" display
 syntax match odinReturnOp "->" display
 
-syntax match odinSingleAttribute "^\s*@\<\w\+\>" display
-syntax keyword odinAttribute private require link_name link_prefix export linkage default_calling_convention link_section extra_linker_flags deferred_in deferred_out deferred_in_out deferred_none
+syntax region odinRawString start=+`+ end=+`+
+syntax region odinChar start=+'+ skip=+\\\\\|\\'+ end=+'+
+syntax region odinString start=+"+ skip=+\\\\\|\\'+ end=+"+ contains=odinEscape
+syntax match odinEscape /\\\([abefnrtv\\'"]\|\o\{2}\|x\x\{2}\|u\x\{4}\|u\x\{8}\)/ display contained 
+
+" @= means "match the previous atom (part between parentheses) but do not
+" consider it part of the matched expression, i.e. the atom must be present
+" but is not part of the syntax group
+
+" Any declaration, constant or procedure
+syntax match odinDeclaration "\v<\w+>(\s*\:\s*\w*\s*\[:=])@="
+syntax match odinFunctionCall "\v(<\w+>\.)=<\w+>\s*(\()@="
+
+syntax match odinCallingConvention /\v"(odin|contextless|stdcall|std|cdecl|c|fastcall|fast|none)"/ contained
+" @Incomplete
+syntax match odinProcedureDecl /\vproc\s*(\"[a-z]+\")=\s*\(.*\)(\s*\-\>\s*(\w+|\([0-9A-Za-z_,: ]+\)))=/ contains=odinDataType,odinVariableDeclaration,odinCallingConvention
+
+syntax keyword odinAttribute private require link_name link_prefix export linkage default_calling_convention link_section extra_linker_flags deferred_in deferred_out deferred_in_out deferred_none  contained
+syntax match odinSingleAttribute "^\s*@\<\w\+\>" display contains=odinAttribute
 syntax region odinAttributeList start="@(" end=")" contains=odinAttribute
 
 syntax match odinDirective "#\<\w\+\>" display
-
 syntax match odinTemplate "$\<\w\+\>"
 
 syntax match odinTodo "TODO"
@@ -118,7 +119,7 @@ syntax match odinNoCheckin "NOCHECKIN"
 syntax match odinHack "HACK"
 
 syntax match odinCommentNote "@\<\w\+\>" contained display
-syntax region odinLineComment start="//" end="$" contains=odinCommentNote, odinTodo, odinNote, odinFixMe, odinNoCheckin, odinHack
+syntax region odinLineComment start="//" end="$" oneline contains=odinCommentNote, odinTodo, odinNote, odinFixMe, odinNoCheckin, odinHack
 syntax region odinBlockComment start="\/\*" end="\*\/" contains=odinBlockComment, odinCommentNote, odinTodo, odinNote, odinFixMe, odinNoCheckin, odinHack
 
 " Maybe scan back to find the beginning of block comments?
@@ -184,16 +185,6 @@ highlight link odinFloat   Float
 
 highlight link odinOperator Operator
 
-highlight link odinString    String
-highlight link odinRawString String
-highlight link odinChar      String
-highlight link odinEscape    String
-
-highlight link odinConstDeclaration    Identifier
-highlight link odinVariableDeclaration Identifier
-"highlight link odinFunctionDecl Function
-highlight link odinFunctionCall Function
-
 highlight link odinDeclarationOp Operator
 highlight link odinDeclAssign    Operator
 highlight link odinAssign        Operator
@@ -206,12 +197,21 @@ highlight link odinDeref     Operator
 highlight link odinTernaryQMark Operator
 highlight link odinReturnOp     Operator
 
+highlight link odinString    String
+highlight link odinRawString String
+highlight link odinChar      String
+highlight link odinEscape    String
+
+highlight link odinDeclaration Identifier
+"highlight link odinVariableDeclaration Identifier
+"highlight link odinFunctionDecl Function
+highlight link odinFunctionCall Function
+
 highlight link odinSingleAttribute Keyword
 highlight link odinAttribute Keyword
 
-highlight link odinDirective Macro
-
-highlight link odinTemplate Constant
+highlight link odinDirective PreProc
+highlight link odinTemplate  PreProc
 
 highlight link odinTodo        Todo
 highlight link odinNote        Todo
