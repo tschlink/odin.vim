@@ -71,7 +71,7 @@ syntax match odinBin "\<0[bB][01]\+\>" display
 syntax match odinDoz "\<0[zZ][0-9a-bA-B]\+\>" display
 syntax match odinFloat "\-\?\<[0-9][0-9_]*\%(\.[0-9][0-9_]*\)\%([eE][+-]\=[0-9_]\+\)\=" display
 
-syntax match odinOperator "\V!\|+\|-\|*\|/\|%\|%%\|"
+syntax match odinOperator "\V!\|+\|-\|*\|/\|%\|%%"
 syntax match odinOperator "\V+=\|-=\|*=\|/=\|%=\|%%="
 syntax match odinOperator "\V>\|>=\|<\|<=\|==\|!=\|&&\|&&=\|||\|||="
 syntax match odinOperator "\V~\|~=\||\||=\|&\|&=\|&~\|&~=\|<<\|<<=\|>>\|>>="
@@ -79,7 +79,7 @@ syntax match odinOperator "\V~\|~=\||\||=\|&\|&=\|&~\|&~=\|<<\|<<=\|>>\|>>="
 syntax region odinRawString start=+`+ end=+`+
 syntax region odinChar start=+'+ skip=+\\\\\|\\'+ end=+'+
 syntax region odinString start=+"+ skip=+\\\\\|\\'+ end=+"+ contains=odinEscape
-syntax match odinEscape display contained /\\\([nrt\\'"]\|x\x\{2}\)/
+syntax match odinEscape display contained /\\\([abefnrtv\\'"]\|\o\{2}\|x\x\{2}\|u\x\{4}\|u\x\{8}\)/
 
 " @= means "match the previous atom (part between parentheses) but do not
 " consider it part of the matched expression, i.e. the atom must be present
@@ -89,14 +89,14 @@ syntax match odinEscape display contained /\\\([nrt\\'"]\|x\x\{2}\)/
 syntax match odinConstDeclaration "\v<\w+>(\s*:\s*\w*\s*:)@="
 syntax match odinVariableDeclaration "\v<\w+>(\s*:\s*\w*\s*\=)@="
 "syntax match odinFunctionDecl "\v<\w*>(\s*::\s*proc)@="
-syntax match odinFunctionCall "\v<\w*\>.\?<\w+>\s*(\()@="
+syntax match odinFunctionCall "\v(<\w+>\.)?<\w+>\s*(\()@="
 
-syntax match odinDeclarationOp "::?" display
+syntax match odinDeclarationOp "::\?" display
 syntax match odinDeclAssign ":=" display
 syntax match odinAssign "=" display
 
-syntax match odinRange "\.\.\=" display
-syntax match odinHalfRange "\.\.<" display
+syntax match odinRange "\V..=" display
+syntax match odinHalfRange "\V..<" display
 syntax match odinAddressOf "&" display
 syntax match odinDeref "\^" display
 
@@ -187,6 +187,7 @@ highlight link odinOperator Operator
 highlight link odinString    String
 highlight link odinRawString String
 highlight link odinChar      String
+highlight link odinEscape    String
 
 highlight link odinConstDeclaration    Identifier
 highlight link odinVariableDeclaration Identifier
