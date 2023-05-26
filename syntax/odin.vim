@@ -91,19 +91,26 @@ syntax match odinReturnOp "->" display
 syntax region odinRawString start=+`+ end=+`+
 syntax region odinChar start=+'+ skip=+\\\\\|\\'+ end=+'+
 syntax region odinString start=+"+ skip=+\\\\\|\\'+ end=+"+ contains=odinEscape
-syntax match odinEscape /\\\([abefnrtv\\'"]\|\o\{2}\|x\x\{2}\|u\x\{4}\|u\x\{8}\)/ display contained 
+syntax match odinEscape /\\\([abefnrtv\\'"]\|\o\{2}\|x\x\{2}\|u\x\{4}\|u\x\{8}\)/ display contained
 
 " @= means "match the previous atom (part between parentheses) but do not
 " consider it part of the matched expression, i.e. the atom must be present
 " but is not part of the syntax group
 
-" Any declaration, constant, variable or procedure
-syntax match odinDeclaration '\v<\w+>(\s*\:\s*[\w\^\[\]\(\)\.\,]*\s*(\:|\=))@='
-syntax match odinFunctionCall "\v(<\w+>\.)=<\w+>\s*(\()@="
+" Any declaration, constant, variable or procedure, with or without assignment
+" type definition pattern: [0-9A-Za-z_[\]()^.]*
+" TODO this doesn't take into account any newlines
+syntax match odinDeclaration '\m\h\w*\(\s*:\s*[0-9A-Za-z_[\]()^.]*\(\s*\(:\|=\)\)\=\)\@='
+syntax match odinFunctionCall "\v(<\h\w*>\.)=<\h\w*>\s*(\()@="
 
-syntax match odinCallingConvention /\v"(odin|contextless|stdcall|std|cdecl|c|fastcall|fast|none)"/ contained
-" @Incomplete
-syntax match odinProcedureDecl /\vproc\s*(\"[a-z]+\")=\s*\(.*\)(\s*\-\>\s*(\w+|\([\w,:^ ]+\)))=/ contains=odinDataType,odinVariableDeclaration,odinCallingConvention
+syntax match odinCallingConvention /\v"(odin|contextless|stdcall|std|cdecl|c|fastcall|fast|none)"/ display contained
+
+" Both, parameters and return values can contain full odinDeclarations. For
+" the sake of simplicity, performance, and readability we don't repeat the
+" full regex here again. Matching on just '.*' should be good enough for most
+" cases
+" TODO this doesn't take into account any newlines
+syntax match odinProcedureDecl /\mproc\s*\("[a-z]\+"\)\=\s*(.*)\(\s*->\s*\(\h\w*\|(.+)\)\)\=\(\s*{\)\@=/ contains=odinDataType,odinDeclaration,odinCallingConvention
 
 syntax keyword odinAttribute private require link_name link_prefix export linkage default_calling_convention link_section extra_linker_flags deferred_in deferred_out deferred_in_out deferred_none  contained
 syntax match odinSingleAttribute "^\s*@\<\w\+\>" display contains=odinAttribute
