@@ -9,6 +9,10 @@ if exists("b:did_ftplugin")
   finish
 endif
 
+function! RunDebug()
+    !odin run . -debug
+endfunction
+
 let b:did_ftplugin = 1
 
 if !exists('current_compiler')

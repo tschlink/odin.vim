@@ -103,7 +103,7 @@ syntax match odinEscape /\\\([abefnrtv\\'"]\|\o\{2}\|x\x\{2}\|u\x\{4}\|u\x\{8}\)
 syntax match odinDeclaration '\m\h\w*\(\s*:\s*[0-9A-Za-z_[\]()^.]*\(\s*\(:\|=\)\)\=\)\@='
 syntax match odinFunctionCall "\v(<\h\w*>\.)=<\h\w*>\s*(\()@="
 
-syntax match odinCallingConvention /\v"(odin|contextless|stdcall|std|cdecl|c|fastcall|fast|none)"/ display contained
+syntax match odinCallingConvention /\v"(odin|contextless|stdcall|std|cdecl|c|fastcall|fast|none)"/ display contained contains=odinString
 
 " Both, parameters and return values can contain full odinDeclarations. For
 " the sake of simplicity, performance, and readability we don't repeat the
@@ -114,7 +114,7 @@ syntax match odinProcedureDecl /\mproc\s*\("[a-z]\+"\)\=\s*(.*)\(\s*->\s*\(\h\w*
 
 syntax keyword odinAttribute private require link_name link_prefix export linkage default_calling_convention link_section extra_linker_flags deferred_in deferred_out deferred_in_out deferred_none  contained
 syntax match odinSingleAttribute "^\s*@\<\w\+\>" display contains=odinAttribute
-syntax region odinAttributeList start="@(" end=")" contains=odinAttribute
+syntax region odinAttributeList start="@(" end=")$" contains=odinAttribute,odinString
 
 syntax match odinDirective "#\<\w\+\>" display
 syntax match odinTemplate "$\<\w\+\>"
@@ -159,9 +159,9 @@ highlight link odinFor      Repeat
 highlight link odinContinue Repeat
 highlight link odinBreak    Repeat
 
-highlight link odinIn     Operator
-highlight link odinNotIn  Operator
-highlight link odinOrElse Operator
+highlight link odinIn     Keyword
+highlight link odinNotIn  Keyword
+highlight link odinOrElse Keyword
 
 highlight link odinSizeOf     Keyword
 highlight link odinOffsetOf   Keyword
