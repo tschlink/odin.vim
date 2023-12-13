@@ -8,12 +8,11 @@
 if exists("b:did_ftplugin")
   finish
 endif
+let b:did_ftplugin = 1
 
 function! RunDebug()
     !odin run . -debug
 endfunction
-
-let b:did_ftplugin = 1
 
 if !exists('current_compiler')
     compiler odin

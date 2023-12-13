@@ -27,6 +27,7 @@ syntax keyword odinElse else
 syntax keyword odinWhere where
 syntax keyword odinSwitch switch
 syntax keyword odinCase case
+syntax keyword odinFallthrough fallthrough
 
 syntax keyword odinFor for
 syntax keyword odinContinue continue
@@ -64,12 +65,13 @@ syntax keyword odinBool true false
 syntax keyword odinNull nil
 syntax match odinNoinit "---"
 
-syntax match odinInteger "\-\?\<\d\+\>" display
-syntax match odinHex "\<0[xX][0-9A-Fa-f]\+\>" display
-syntax match odinOct "\<0[oO][0-7]\+\>" display
-syntax match odinBin "\<0[bB][01]\+\>" display
-syntax match odinDoz "\<0[zZ][0-9a-bA-B]\+\>" display
-syntax match odinFloat "\-\?\<[0-9][0-9_]*\%(\.[0-9][0-9_]*\)\%([eE][+-]\=[0-9_]\+\)\=" display
+syntax match odinInteger "\<[0-9][0-9_]*\>" display
+syntax match odinHex     "\<0[xX][0-9A-Fa-f][0-9A-Fa-f_]*\>" display
+syntax match odinOct     "\<0[oO][0-7][0-7_]*\>" display
+syntax match odinBin     "\<0[bB][01][01_]*\>" display
+syntax match odinDoz     "\<0[zZ][0-9a-bA-B][0-9a-bA-B_]*\>" display
+
+syntax match odinFloat   "\<[0-9][0-9_]*\%(\.[0-9_]\+\)\%([eE][+-]\=[0-9_]\+\)\=" display
 
 syntax match odinOperator "\V!\|+\|-\|*\|/\|%\|%%"
 syntax match odinOperator "\V+=\|-=\|*=\|/=\|%=\|%%="
@@ -154,6 +156,8 @@ highlight link odinElse   Conditional
 highlight link odinWhere  Conditional
 highlight link odinSwitch Conditional
 highlight link odinCase   Label
+
+highlight link odinFallthrough Keyword
 
 highlight link odinFor      Repeat
 highlight link odinContinue Repeat

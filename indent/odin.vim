@@ -29,6 +29,11 @@ function! GetOdinIndent(lnum)
     let ind += &sw
   endif
 
+  " Indent if previous line is a case statement
+  if prevline =~ '^\s*case.*:$'
+    let ind += &sw
+  endif
+
   if line =~ '^\s*[)}]'
     let ind -= &sw
   endif
